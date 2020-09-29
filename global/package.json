@@ -1,0 +1,11 @@
+{
+  "name": "el-cinc",
+  "version": "0.0.1",
+  "description": "interfaces ElCinc",
+  "main": "index.d.ts",
+  "scripts": {
+    "pub": "npm publish --access public"
+  },
+  "author": "Miguel Moya Ortega",
+  "license": "ISC"
+}

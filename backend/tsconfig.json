@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+
+    "strictNullChecks": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+
+    "removeComments": true,
+    "declaration": false,
+    "sourceMap": false,
+
+    "target": "esnext",
+    "outDir": "./dist",
+    "resolveJsonModule": true
+  },
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
