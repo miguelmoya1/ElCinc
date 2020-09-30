@@ -1490,11 +1490,6 @@ clone-response@^1.0.2:
   dependencies:
     mimic-response "^1.0.0"
 
-club-del-bonsai@^1.1.10:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/club-del-bonsai/-/club-del-bonsai-1.1.10.tgz#6e2b23e28b09efb068ce5ca663199ac321da4baa"
-  integrity sha512-+j+9HzY2FdINdawmYjGb+/78JM1uQUVXIALCkABNVZGc+X4Gs3JalCS6kgrKfokCnNeD4a0Ow/ME/Vq4BDqUvQ==
-
 co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
