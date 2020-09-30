@@ -7,12 +7,8 @@ export interface IUser {
   surname?: string;
   level?: number;
   isLogged?: Date | null;
-
-  /**
-   * COORDINTES: [LNG, LAT]
-   */
-  location?: { type: string; coordinates: [number, number]; };
-
+  /** COORDINTES: [LNG, LAT] */
+  location?: { type: string; coordinates: [number, number] };
   appVersion?: string;
   appBuild?: string;
   operatingSystem?: string;
