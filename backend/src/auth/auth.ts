@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { JWT_SECRET, JWT_EXPIRES, JWT_ISSUER } from '../app.constants';
-import { IUser } from 'club-del-bonsai';
+import { IUser } from '../../../global';
 
 class Auth {
   encode(user: IUser) {

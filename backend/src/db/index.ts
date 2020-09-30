@@ -8,7 +8,7 @@ import * as fs from 'fs';
 interface IMigrationType {
   up: (queryInterface: QueryInterface, sequelize: Sequelize) => Promise<void>;
   down: (queryInterface: QueryInterface, sequelize: Sequelize) => Promise<void>;
-};
+}
 
 class DB {
   public sequelize!: Sequelize;
@@ -50,7 +50,7 @@ class DB {
       this.sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
         host: DB_HOST,
         dialect: DB_DIALECT,
-        logging: !PROD ? text => console.log(highliteSQL(text)) : undefined,
+        logging: !PROD ? (text) => console.log(highliteSQL(text)) : undefined,
         pool: {
           max: 20,
           min: 1,
@@ -73,17 +73,17 @@ class DB {
 
     const files = fs.readdirSync(path.join(__dirname, './migrations/'));
 
-    let meta: [{ name: string; }[], any] = [[], undefined];
+    let meta: [{ name: string }[], any] = [[], undefined];
 
     try {
       this.sequelize.query('CREATE TABLE IF NOT EXISTS "SequelizeMeta" ("name" VARCHAR);');
-      meta = await this.sequelize.query('SELECT "name" FROM "SequelizeMeta"') as any;
+      meta = (await this.sequelize.query('SELECT "name" FROM "SequelizeMeta"')) as any;
     } catch {
       console.log(Colors.FgRed, 'NO SE HA PODIDO CREAR LA TABLA DE MIGRACIONES', Colors.Reset);
     }
 
     for await (const file of files) {
-      if (file && meta[0].findIndex(m => m.name === file) === -1) {
+      if (file && meta[0].findIndex((m) => m.name === file) === -1) {
         try {
           const migration: IMigrationType = require(path.join(__dirname, './migrations/', file));
           try {

@@ -1,8 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../user/user.model';
-import { IUser } from 'club-del-bonsai';
 import * as bcrypt from 'bcryptjs';
-
+import { IUser } from '../../../global';
 
 @Injectable()
 export class UserService {
@@ -10,9 +9,14 @@ export class UserService {
   async get(id: string): Promise<User>;
   async get(id?: string) {
     if (id) {
-      return await User.findOne({ where: { id }, attributes: { exclude: ['password', 'deletedAt'] } });
+      return await User.findOne({
+        where: { id },
+        attributes: { exclude: ['password', 'deletedAt'] },
+      });
     } else {
-      return await User.findAll({ attributes: { exclude: ['password', 'deletedAt'] } });
+      return await User.findAll({
+        attributes: { exclude: ['password', 'deletedAt'] },
+      });
     }
   }
 

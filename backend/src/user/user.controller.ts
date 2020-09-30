@@ -5,7 +5,7 @@ import { IUser } from '../../../global';
 
 @Controller()
 export class UserController {
-  constructor(protected userService: UserService) { }
+  constructor(protected userService: UserService) {}
 
   @Get('/')
   async getUserLogged(@Headers('authorization') token: string) {

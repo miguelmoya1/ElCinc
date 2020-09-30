@@ -1,11 +1,11 @@
 import { Controller, Post, Body, Get, Headers, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { auth } from './auth';
-import { IUser } from 'club-del-bonsai';
+import { IUser } from '../../../global';
 
 @Controller()
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   async login(@Body() body: IUser) {

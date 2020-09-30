@@ -3,7 +3,7 @@ import * as bcrypt from 'bcryptjs';
 import { MASTER_PASSWORD } from '../app.constants';
 import { auth } from './auth';
 import { User } from '../user/user.model';
-import { IUser } from 'club-del-bonsai';
+import { IUser } from '../../../global';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,8 @@ export class AuthService {
   async register(user: IUser) {
     const userDB = await User.findOne({ where: { email: user.email! }, attributes: ['id'] });
     if (!userDB) {
-      delete user.id; delete user.root;
+      delete user.id;
+      delete user.root;
       try {
         user.password = bcrypt.hashSync(user.password!);
         const userToReturn = await User.create(user);

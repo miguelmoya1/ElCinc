@@ -12,7 +12,7 @@ export class User extends Model<IUser> implements IUser {
   public root!: boolean;
   public isLogged!: Date;
 
-  public location?: { type: string; coordinates: [number, number]; };
+  public location?: { type: string; coordinates: [number, number] };
 
   public appVersion!: string;
   public appBuild!: string;
@@ -28,28 +28,35 @@ export class User extends Model<IUser> implements IUser {
   public readonly updatedAt!: Date;
 }
 
-User.init({
-  id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-  name: { type: DataTypes.STRING },
-  surname: { type: DataTypes.STRING },
-  email: { type: DataTypes.STRING, unique: true },
-  password: { type: DataTypes.STRING },
+User.init(
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: { type: DataTypes.STRING },
+    surname: { type: DataTypes.STRING },
+    email: { type: DataTypes.STRING, unique: true },
+    password: { type: DataTypes.STRING },
 
-  isLogged: { type: DataTypes.DATE },
-  root: { type: DataTypes.BOOLEAN, defaultValue: false },
+    isLogged: { type: DataTypes.DATE },
+    root: { type: DataTypes.BOOLEAN, defaultValue: false },
 
-  location: { type: DataTypes.GEOGRAPHY },
+    location: { type: DataTypes.GEOGRAPHY },
 
-  appVersion: { type: DataTypes.STRING },
-  appBuild: { type: DataTypes.STRING },
-  operatingSystem: { type: DataTypes.STRING },
-  osVersion: { type: DataTypes.STRING },
-  platform: { type: DataTypes.STRING },
-  model: { type: DataTypes.STRING },
-  manufacturer: { type: DataTypes.STRING },
-  uuid: { type: DataTypes.STRING },
-}, {
-  sequelize: db.sequelize,
-  paranoid: true,
-  timestamps: true,
-});
+    appVersion: { type: DataTypes.STRING },
+    appBuild: { type: DataTypes.STRING },
+    operatingSystem: { type: DataTypes.STRING },
+    osVersion: { type: DataTypes.STRING },
+    platform: { type: DataTypes.STRING },
+    model: { type: DataTypes.STRING },
+    manufacturer: { type: DataTypes.STRING },
+    uuid: { type: DataTypes.STRING },
+  },
+  {
+    sequelize: db.sequelize,
+    paranoid: true,
+    timestamps: true,
+  }
+);
