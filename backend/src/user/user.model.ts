@@ -1,6 +1,6 @@
-import { Model, DataTypes, HasOneGetAssociationMixin, HasOneSetAssociationMixin } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
+import { IUser } from '../../../global';
 import { db } from '../db';
-import { IBonsai, IUser } from 'club-del-bonsai';
 
 export class User extends Model<IUser> implements IUser {
   public id!: string;
@@ -26,9 +26,6 @@ export class User extends Model<IUser> implements IUser {
   // timestamps!
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
-  public getBonsai!: HasOneGetAssociationMixin<IBonsai>;
-  public setBonsai!: HasOneSetAssociationMixin<IBonsai, string>;
 }
 
 User.init({

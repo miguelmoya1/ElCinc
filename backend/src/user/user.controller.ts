@@ -1,7 +1,7 @@
 import { Controller, Get, HttpException, HttpStatus, Headers, Put, Body, Delete, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { auth } from '../auth/auth';
-import { IUser } from 'club-del-bonsai';
+import { IUser } from '../../../global';
 
 @Controller()
 export class UserController {
@@ -16,17 +16,6 @@ export class UserController {
       return user;
     }
     throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-  }
-
-  @Get('/online')
-  async usersOnline(@Headers('authorization') token: string) {
-    const id = auth.decode(token);
-    const user = await this.userService.get(id);
-
-    if (user.root) {
-      return this.userService.getUsersOnline();
-    }
-    throw new HttpException('No tienes permisos para ver estos datos', HttpStatus.UNAUTHORIZED);
   }
 
   @Get('/all')
