@@ -15,7 +15,9 @@
 
     "target": "esnext",
     "outDir": "./dist",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["jest", "node"],
+    "moduleResolution": "node"
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules"]
 }

@@ -4,6 +4,8 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './shared/middleware/logger.middleware';
 import { Routes, RouterModule } from 'nest-router';
+import { ClientModule } from './client/client.module';
+import { EventModule } from './event/event.module';
 
 const routes: Routes = [
   {
@@ -16,7 +18,7 @@ const routes: Routes = [
   },
 ];
 @Module({
-  imports: [RouterModule.forRoutes(routes), UserModule, AuthModule],
+  imports: [RouterModule.forRoutes(routes), UserModule, AuthModule, ClientModule, EventModule],
   controllers: [AppController],
   providers: [],
 })

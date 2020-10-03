@@ -1,12 +1,14 @@
-export interface IUser {
+export interface IClient {
   id?: string;
-  password?: string;
   email?: string;
-  root?: boolean;
   name?: string;
   surname?: string;
+  password?: string;
   isLogged?: Date | null;
-  /** COORDINTES: [LNG, LAT] */
+
+  /**
+   * COORDINTES: [LNG, LAT]
+   **/
   location?: { type: string; coordinates: [number, number] };
   appVersion?: string;
   appBuild?: string;
