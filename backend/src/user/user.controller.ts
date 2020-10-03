@@ -9,8 +9,8 @@ export class UserController {
 
   @Get('/')
   async getUserLogged(@Headers('authorization') token: string) {
-    const id = auth.decode(token);
-    const user = await this.userService.get(id);
+    const userToken = auth.decode(token);
+    const user = await this.userService.get(userToken.id!);
 
     if (user) {
       return user;
@@ -20,35 +20,40 @@ export class UserController {
 
   @Get('/all')
   async getAllUsers(@Headers('authorization') token: string) {
-    const id = auth.decode(token);
-    const user = await this.userService.get(id);
+    const userToken = auth.decode(token);
+    const user = await this.userService.get(userToken.id!);
     if (user.root) {
       return await this.userService.get();
     }
     throw new HttpException('No tienes permisos para ver estos datos', HttpStatus.UNAUTHORIZED);
   }
 
+  /**
+   * test
+   * @param token
+   * @param user
+   */
   @Put('/')
   async update(@Headers('authorization') token: string, @Body() user: IUser) {
-    const id = auth.decode(token);
-    const userLogged = await this.userService.get(id);
+    const userToken = auth.decode(token);
+    const userLogged = await this.userService.get(userToken.id!);
 
     if (userLogged) {
-      return this.userService.edit(user, id);
+      return this.userService.edit(user, userToken.id!);
     }
     throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
   }
 
   @Put('/phoneInfo')
   async setPhoneInfo(@Headers('authorization') token: string, @Body() user: IUser) {
-    const id = auth.decode(token);
-    return this.userService.setPhoneInfo(user, id);
+    const userToken = auth.decode(token);
+    return this.userService.setPhoneInfo(user, userToken.id!);
   }
 
   @Put('/admin')
   async updateAdmin(@Headers('authorization') token: string, @Body() user: IUser) {
-    const id = auth.decode(token);
-    const userLogged = await this.userService.get(id);
+    const userToken = auth.decode(token);
+    const userLogged = await this.userService.get(userToken.id!);
 
     if (userLogged && userLogged.root) {
       return this.userService.edit(user, user.id!);
@@ -58,8 +63,8 @@ export class UserController {
 
   @Get('/:id')
   async getUser(@Headers('authorization') token: string, @Param('id') id: string) {
-    const idLogged = auth.decode(token);
-    const user = await this.userService.get(idLogged);
+    const userToken = auth.decode(token);
+    const user = await this.userService.get(userToken.id!);
 
     if (user && user.root) {
       return await this.userService.get(id);
@@ -69,8 +74,8 @@ export class UserController {
 
   @Delete('/:id')
   async delete(@Headers('authorization') token: string, @Param('id') id: string) {
-    const idLogged = auth.decode(token);
-    const user = await this.userService.get(idLogged);
+    const userToken = auth.decode(token);
+    const user = await this.userService.get(userToken.id!);
     if (user.root) {
       return await this.userService.delete(id);
     }

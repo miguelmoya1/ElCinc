@@ -26,6 +26,7 @@ export class User extends Model<IUser> implements IUser {
   // timestamps!
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 }
 
 User.init(

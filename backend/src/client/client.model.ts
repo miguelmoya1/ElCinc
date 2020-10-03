@@ -25,6 +25,7 @@ export class Client extends Model<IClient> implements IClient {
   // timestamps!
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 }
 
 Client.init(

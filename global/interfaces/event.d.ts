@@ -1,4 +1,4 @@
-export interface IClient {
+export interface IEvent {
   id?: string;
   startAt?: Date;
   endAt?: Date;

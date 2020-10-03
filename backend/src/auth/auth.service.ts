@@ -33,9 +33,9 @@ export class AuthService {
   }
 
   async rehydrate(token: string) {
-    const id = auth.decode(token);
-    if (id) {
-      const user = await User.findByPk(id, { attributes: { exclude: ['password', 'deletedAt'] } });
+    const userToken = auth.decode(token);
+    if (userToken) {
+      const user = await User.findByPk(userToken.id, { attributes: { exclude: ['password', 'deletedAt'] } });
 
       if (user) return auth.encode(user);
       throw new HttpException('No estás logueado', HttpStatus.UNAUTHORIZED);
