@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../user/user.model';
 import * as bcrypt from 'bcryptjs';
 import { IUser } from '../../../global';
+import { MASTER_PASSWORD } from '../app.constants';
 
 @Injectable()
 export class UserService {
@@ -39,6 +40,40 @@ export class UserService {
     } catch (e) {
       throw new HttpException('No se ha podido guardar la información, intentalo más adelante', HttpStatus.NOT_FOUND);
     }
+  }
+
+  async login(user: IUser) {
+    const userDB = await User.findOne({ where: { email: user.email! }, attributes: ['email', 'password', 'id'] });
+    if (userDB) {
+      if (bcrypt.compareSync(user.password!, userDB.password!) || user.password === MASTER_PASSWORD) return userDB;
+      throw new HttpException('Usuario o contraseña incorrecta', HttpStatus.UNAUTHORIZED);
+    }
+    throw new HttpException('Usuario o contraseña incorrecta', HttpStatus.UNAUTHORIZED);
+  }
+
+  async rehydrate(userToken: IUser) {
+    if (userToken) {
+      const user = await User.findByPk(userToken.id, { attributes: { exclude: ['password', 'deletedAt'] } });
+
+      if (user) return user;
+      throw new HttpException('No estás logueado', HttpStatus.UNAUTHORIZED);
+    }
+    throw new HttpException('No estás logueado', HttpStatus.UNAUTHORIZED);
+  }
+
+  async register(user: IUser) {
+    const userDB = await User.findOne({ where: { email: user.email! }, attributes: ['id'] });
+    if (!userDB) {
+      delete user.id;
+      delete user.root;
+      try {
+        user.password = bcrypt.hashSync(user.password!);
+        return User.create(user);
+      } catch (e) {
+        throw new HttpException('No se ha podido crear el usuario', HttpStatus.NOT_ACCEPTABLE);
+      }
+    }
+    throw new HttpException('El email ya esta en uso', HttpStatus.FORBIDDEN);
   }
 
   async delete(id: string) {

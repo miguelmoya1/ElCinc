@@ -1,45 +1,22 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
-import { MASTER_PASSWORD } from '../app.constants';
-import { auth } from './auth';
-import { User } from '../user/user.model';
-import { IUser } from '../../../global';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { IClient, IUser } from '../../../global';
+import { JWT_SECRET, JWT_EXPIRES, JWT_ISSUER } from '../shared/secret';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
-  async login(user: IUser) {
-    const userDB = await User.findOne({ where: { email: user.email! }, attributes: ['email', 'password', 'id'] });
-    if (userDB) {
-      if (bcrypt.compareSync(user.password!, userDB.password!) || user.password === MASTER_PASSWORD) return auth.encode(userDB);
-      throw new HttpException('Usuario o contraseña incorrecta', HttpStatus.UNAUTHORIZED);
-    }
-    throw new HttpException('Usuario o contraseña incorrecta', HttpStatus.UNAUTHORIZED);
+  public encode(user: IUser | IClient) {
+    return jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES, issuer: JWT_ISSUER });
   }
 
-  async register(user: IUser) {
-    const userDB = await User.findOne({ where: { email: user.email! }, attributes: ['id'] });
-    if (!userDB) {
-      delete user.id;
-      delete user.root;
-      try {
-        user.password = bcrypt.hashSync(user.password!);
-        const userToReturn = await User.create(user);
-        return auth.encode(userToReturn);
-      } catch (e) {
-        throw new HttpException('No se ha podido crear el usuario', HttpStatus.NOT_ACCEPTABLE);
-      }
+  decode(token: string) {
+    try {
+      token = token.replace('Bearer ', '');
+      const tokenVerify = jwt.verify(token, JWT_SECRET, { issuer: JWT_ISSUER }) as IUser | IClient;
+      if (!tokenVerify) throw new HttpException('Sesión expirada, entra de nuevo', HttpStatus.UNAUTHORIZED);
+      return tokenVerify;
+    } catch (e) {
+      throw new HttpException('Sesión expirada, entra de nuevo', HttpStatus.UNAUTHORIZED);
     }
-    throw new HttpException('El email ya esta en uso', HttpStatus.FORBIDDEN);
-  }
-
-  async rehydrate(token: string) {
-    const userToken = auth.decode(token);
-    if (userToken) {
-      const user = await User.findByPk(userToken.id, { attributes: { exclude: ['password', 'deletedAt'] } });
-
-      if (user) return auth.encode(user);
-      throw new HttpException('No estás logueado', HttpStatus.UNAUTHORIZED);
-    }
-    throw new HttpException('No estás logueado', HttpStatus.UNAUTHORIZED);
   }
 }
