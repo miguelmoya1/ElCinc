@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth.service';
 export class UserController {
   constructor(protected userService: UserService, private authServcice: AuthService) {}
 
-  @Get('/')
+  @Get()
   async getUserLogged(@Headers('authorization') token: string) {
     const userToken = this.authServcice.decode(token);
     const user = await this.userService.get(userToken.id!);
@@ -28,7 +28,7 @@ export class UserController {
     throw new HttpException('No tienes permisos para ver estos datos', HttpStatus.UNAUTHORIZED);
   }
 
-  @Put('/')
+  @Put()
   async update(@Headers('authorization') token: string, @Body() user: IUser) {
     const userToken = this.authServcice.decode(token);
     const userLogged = await this.userService.get(userToken.id!);
