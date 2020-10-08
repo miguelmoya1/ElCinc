@@ -86,13 +86,10 @@ class DB {
       if (file && meta[0].findIndex((m) => m.name === file) === -1) {
         try {
           const migration: IMigrationType = require(path.join(__dirname, './migrations/', file));
-          try {
-            await migration.up(queryInterface, this.sequelize);
-            await this.sequelize.query({ query: 'INSERT INTO "SequelizeMeta" VALUES (?)', values: [file] });
-          } catch (e) {
-            await migration.down(queryInterface, this.sequelize);
-          }
+          await migration.up(queryInterface, this.sequelize);
+          await this.sequelize.query({ query: 'INSERT INTO "SequelizeMeta" VALUES (?)', values: [file] });
         } catch {
+          await migration.down(queryInterface, this.sequelize);
           console.log('NO SE HA PODIDO LANZAR LA MIGRACIÓN: ', file);
         }
       } else {
