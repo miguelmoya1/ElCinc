@@ -1,14 +1,8 @@
-import { QueryInterface, Sequelize, SyncOptions } from 'sequelize';
+import { Sequelize, SyncOptions } from 'sequelize';
 import { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, PROD } from '../app.constants';
 import { Colors } from '../shared/colors';
 import { highliteSQL } from '../shared/sequelize-color';
-import * as path from 'path';
-import * as fs from 'fs';
-
-interface IMigrationType {
-  up: (queryInterface: QueryInterface, sequelize: Sequelize) => Promise<void>;
-  down: (queryInterface: QueryInterface, sequelize: Sequelize) => Promise<void>;
-}
+import { runMigrations } from '../migrations';
 
 class DB {
   public sequelize!: Sequelize;
@@ -22,9 +16,9 @@ class DB {
 
   public async init() {
     await this.createExtensions();
-    await this.runMigrations();
     await this.setAssociations();
     await this.sequelize.sync(this.options);
+    await runMigrations(this.sequelize);
     await this.createDefaultValues();
   }
 
@@ -65,37 +59,6 @@ class DB {
 
   private async createExtensions() {
     await this.sequelize.query('CREATE EXTENSION IF NOT EXISTS postgis;');
-  }
-
-  private async runMigrations() {
-    console.log(Colors.FgBlue, 'RUNNING MIGRATIONS...', Colors.Reset);
-    const queryInterface = this.sequelize.getQueryInterface();
-
-    const files = fs.readdirSync(path.join(__dirname, './migrations/'));
-
-    let meta: [{ name: string }[], any] = [[], undefined];
-
-    try {
-      this.sequelize.query('CREATE TABLE IF NOT EXISTS "SequelizeMeta" ("name" VARCHAR);');
-      meta = (await this.sequelize.query('SELECT "name" FROM "SequelizeMeta"')) as any;
-    } catch {
-      console.log(Colors.FgRed, 'NO SE HA PODIDO CREAR LA TABLA DE MIGRACIONES', Colors.Reset);
-    }
-
-    for await (const file of files) {
-      if (file && meta[0].findIndex((m) => m.name === file) === -1) {
-        try {
-          const migration: IMigrationType = require(path.join(__dirname, './migrations/', file));
-          await migration.up(queryInterface, this.sequelize);
-          await this.sequelize.query({ query: 'INSERT INTO "SequelizeMeta" VALUES (?)', values: [file] });
-        } catch {
-          await migration.down(queryInterface, this.sequelize);
-          console.log('NO SE HA PODIDO LANZAR LA MIGRACIÓN: ', file);
-        }
-      } else {
-        console.log(`${Colors.FgYellow}${file} ${Colors.FgRed}YA HA SIDO AÑADIDO PREVIAMENTE${Colors.Reset}`);
-      }
-    }
   }
 }
 
