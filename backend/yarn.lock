@@ -840,7 +840,7 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/sequelize@4.28.9":
+"@types/sequelize@4.28.9", "@types/sequelize@^4.28.9":
   version "4.28.9"
   resolved "https://registry.yarnpkg.com/@types/sequelize/-/sequelize-4.28.9.tgz#64d0fad07de2f30ef11003a8c2ef5ac0321de115"
   integrity sha512-QqYgkw/2fEc0FyEQejnxM7cHKB8XBV3Y69k7GSFOToQBOXos0PJVqNpgROXZddXIkl2d6zicYssHuy75ws84sw==
@@ -4695,6 +4695,15 @@ send@0.17.1:
     on-finished "~2.3.0"
     range-parser "~1.2.1"
     statuses "~1.5.0"
+
+sequelize-do-migrations@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/sequelize-do-migrations/-/sequelize-do-migrations-1.0.14.tgz#dc1bb7cd2c52b90e920769a783155de16b5c46e5"
+  integrity sha512-Ea16daOSMreGGIrLOCFmLLk1hHd/L92w6Y4GBFVow5kysHIr5OhvbrRALipEqAB0QYa9D6QCU3rAj8/pcBYrUA==
+  dependencies:
+    "@types/sequelize" "^4.28.9"
+    sequelize "^6.3.5"
+    typescript "^4.0.3"
 
 sequelize-pool@^6.0.0:
   version "6.1.0"

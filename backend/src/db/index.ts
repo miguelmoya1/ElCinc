@@ -2,7 +2,7 @@ import { Sequelize, SyncOptions } from 'sequelize';
 import { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_DIALECT, PROD } from '../app.constants';
 import { Colors } from '../shared/colors';
 import { highliteSQL } from '../shared/sequelize-color';
-import { runMigrations } from '../migrations';
+import { runMigrations } from 'sequelize-do-migrations';
 
 class DB {
   public sequelize!: Sequelize;
@@ -18,7 +18,7 @@ class DB {
     await this.createExtensions();
     await this.setAssociations();
     await this.sequelize.sync(this.options);
-    await runMigrations(this.sequelize);
+    await runMigrations(this.sequelize, { showLogs: true });
     await this.createDefaultValues();
   }
 
